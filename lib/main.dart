@@ -36,7 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _checkVibrationSupport() async {
     bool? hasVibrator = await Vibration.hasVibrator();
     bool? hasAmplitudeControl = await Vibration.hasAmplitudeControl();
-    bool? hasCustomVibrationsSupport = await Vibration.hasCustomVibrationsSupport();
+    bool? hasCustomVibrationsSupport =
+        await Vibration.hasCustomVibrationsSupport();
 
     setState(() {
       _hasVibrator = hasVibrator ?? false;
@@ -57,7 +58,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<void> _vibrate({int? duration, int? amplitude, List<int>? pattern}) async {
+  Future<void> _vibrate(
+      {int? duration, int? amplitude, List<int>? pattern}) async {
     if (!_hasVibrator) return;
 
     if (pattern != null) {
@@ -80,69 +82,68 @@ class _MyHomePageState extends State<MyHomePage> {
   // iOS-style haptic feedback implementations
   void _notificationSuccess() {
     _vibrate(
-      duration: 40,
-      amplitude: _hasAmplitudeControl ? 110 : null,
-      pattern: _hasCustomVibrationsSupport ? [0, 40] : null,
+      duration: 60,
+      amplitude: _hasAmplitudeControl ? 20 : null,
+      pattern: _hasCustomVibrationsSupport ? [0, 10, 140, 20] : null,
     );
   }
 
   void _notificationWarning() {
     _vibrate(
-      duration: 80,
-      amplitude: _hasAmplitudeControl ? 160 : null,
-      pattern: _hasCustomVibrationsSupport ? [0, 30, 50, 30] : null,
+      duration: 60,
+      amplitude: _hasAmplitudeControl ? 20 : null,
+      pattern: _hasCustomVibrationsSupport ? [0, 20, 140, 10] : null,
     );
   }
 
   void _notificationError() {
     _vibrate(
-      duration: 120,
-      amplitude: _hasAmplitudeControl ? 200 : null,
-      pattern: _hasCustomVibrationsSupport ? [0, 40, 60, 40] : null,
+      duration: 60,
+      amplitude: _hasAmplitudeControl ? 20 : null,
+      pattern:
+          _hasCustomVibrationsSupport ? [0, 40, 80, 30, 80, 20, 80, 10] : null,
     );
   }
 
   void _impactLight() {
     _vibrate(
       duration: 20,
-      amplitude: _hasAmplitudeControl ? 80 : null,
+      amplitude: _hasAmplitudeControl ? 50 : null,
     );
   }
 
   void _impactMedium() {
     _vibrate(
       duration: 25,
-      amplitude: _hasAmplitudeControl ? 120 : null,
+      amplitude: _hasAmplitudeControl ? 80 : null,
     );
   }
 
   void _impactHeavy() {
     _vibrate(
       duration: 30,
-      amplitude: _hasAmplitudeControl ? 180 : null,
+      amplitude: _hasAmplitudeControl ? 110 : null,
     );
   }
 
   void _impactRigid() {
     _vibrate(
-      duration: 15,
-      amplitude: _hasAmplitudeControl ? 200 : null,
-      pattern: _hasCustomVibrationsSupport ? [0, 15, 10, 15] : null,
+      duration: 20,
+      amplitude: _hasAmplitudeControl ? 180 : null,
     );
   }
 
   void _impactSoft() {
     _vibrate(
-      duration: 35,
-      amplitude: _hasAmplitudeControl ? 80 : null,
-      pattern: _hasCustomVibrationsSupport ? [0, 35, 15, 25] : null,
+      duration: 30,
+      amplitude: _hasAmplitudeControl ? 60 : null,
     );
   }
 
   void _selectionClick() {
     _vibrate(
-      duration: 10,
-      amplitude: _hasAmplitudeControl ? 80 : null,
+      duration: 15,
+      amplitude: _hasAmplitudeControl ? 15 : null,
     );
   }
 
@@ -190,14 +191,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 _buildFeedbackButton('Success', _notificationSuccess),
                 _buildFeedbackButton('Warning', _notificationWarning),
                 _buildFeedbackButton('Error', _notificationError),
-                
                 _buildSectionTitle('Impact Feedback'),
                 _buildFeedbackButton('Light', _impactLight),
                 _buildFeedbackButton('Medium', _impactMedium),
                 _buildFeedbackButton('Heavy', _impactHeavy),
                 _buildFeedbackButton('Rigid', _impactRigid),
                 _buildFeedbackButton('Soft', _impactSoft),
-                
                 _buildSectionTitle('Selection Feedback'),
                 _buildFeedbackButton('Click', _selectionClick),
               ],
