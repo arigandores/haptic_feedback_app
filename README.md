@@ -1,6 +1,6 @@
 # Haptic Feedback App
 
-A Flutter application that implements iOS-style haptic feedback patterns for Android devices. The app supports devices with API level 21 and above, providing graceful fallbacks for devices with limited haptic capabilities.
+A Flutter application that delivers consistent haptic feedback on both Android and iOS devices. The app automatically falls back to basic vibration when advanced features are unavailable.
 
 ## Features
 
