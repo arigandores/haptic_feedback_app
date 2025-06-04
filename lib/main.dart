@@ -39,6 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
     bool? hasCustomVibrationsSupport =
         await Vibration.hasCustomVibrationsSupport();
 
+    if (!mounted) return;
+
     setState(() {
       _hasVibrator = hasVibrator ?? false;
       _hasAmplitudeControl = hasAmplitudeControl ?? false;
