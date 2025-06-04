@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haptic_feedback_app/universal_haptic.dart';
 import 'package:vibration/vibration.dart';
 
 void main() {
@@ -30,124 +31,64 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool _hasVibrator = false;
-  bool _hasAmplitudeControl = false;
-  bool _hasCustomVibrationsSupport = false;
 
   Future<void> _checkVibrationSupport() async {
-    bool? hasVibrator = await Vibration.hasVibrator();
-    bool? hasAmplitudeControl = await Vibration.hasAmplitudeControl();
-    bool? hasCustomVibrationsSupport =
-        await Vibration.hasCustomVibrationsSupport();
+    bool hasVibrator = await Vibration.hasVibrator();
 
     if (!mounted) return;
 
     setState(() {
-      _hasVibrator = hasVibrator ?? false;
-      _hasAmplitudeControl = hasAmplitudeControl ?? false;
-      _hasCustomVibrationsSupport = hasCustomVibrationsSupport ?? false;
+      _hasVibrator = hasVibrator;
     });
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Vibrator: $_hasVibrator\n'
-            'Amplitude Control: $_hasAmplitudeControl\n'
-            'Custom Vibrations: $_hasCustomVibrationsSupport',
+            'Vibrator: $_hasVibrator',
           ),
         ),
       );
     }
   }
 
-  Future<void> _vibrate(
-      {int? duration, int? amplitude, List<int>? pattern}) async {
-    if (!_hasVibrator) return;
-
-    if (pattern != null) {
-      if (_hasCustomVibrationsSupport) {
-        await Vibration.vibrate(pattern: pattern);
-      } else {
-        // Fallback for devices without custom vibration support
-        await Vibration.vibrate(duration: pattern.reduce((a, b) => a + b));
-      }
-    } else if (duration != null) {
-      if (_hasAmplitudeControl && amplitude != null) {
-        await Vibration.vibrate(duration: duration, amplitude: amplitude);
-      } else {
-        // Fallback for devices without amplitude control
-        await Vibration.vibrate(duration: duration);
-      }
-    }
-  }
-
-  // iOS-style haptic feedback implementations
+  // Basic haptic feedback wrappers
   void _notificationSuccess() {
-    _vibrate(
-      duration: 60,
-      amplitude: _hasAmplitudeControl ? 20 : null,
-      pattern: _hasCustomVibrationsSupport ? [0, 10, 140, 20] : null,
-    );
+    UniversalHaptic.lightImpact();
   }
 
   void _notificationWarning() {
-    _vibrate(
-      duration: 60,
-      amplitude: _hasAmplitudeControl ? 20 : null,
-      pattern: _hasCustomVibrationsSupport ? [0, 20, 140, 10] : null,
-    );
+    UniversalHaptic.mediumImpact();
   }
 
   void _notificationError() {
-    _vibrate(
-      duration: 60,
-      amplitude: _hasAmplitudeControl ? 20 : null,
-      pattern:
-          _hasCustomVibrationsSupport ? [0, 40, 80, 30, 80, 20, 80, 10] : null,
-    );
+    UniversalHaptic.heavyImpact();
   }
 
   void _impactLight() {
-    _vibrate(
-      duration: 20,
-      amplitude: _hasAmplitudeControl ? 50 : null,
-    );
+    UniversalHaptic.lightImpact();
   }
 
   void _impactMedium() {
-    _vibrate(
-      duration: 25,
-      amplitude: _hasAmplitudeControl ? 80 : null,
-    );
+    UniversalHaptic.mediumImpact();
   }
 
   void _impactHeavy() {
-    _vibrate(
-      duration: 30,
-      amplitude: _hasAmplitudeControl ? 110 : null,
-    );
+    UniversalHaptic.heavyImpact();
   }
 
   void _impactRigid() {
-    _vibrate(
-      duration: 20,
-      amplitude: _hasAmplitudeControl ? 180 : null,
-    );
+    UniversalHaptic.mediumImpact();
   }
 
   void _impactSoft() {
-    _vibrate(
-      duration: 30,
-      amplitude: _hasAmplitudeControl ? 60 : null,
-    );
+    UniversalHaptic.lightImpact();
   }
 
   void _selectionClick() {
-    _vibrate(
-      duration: 15,
-      amplitude: _hasAmplitudeControl ? 15 : null,
-    );
+    UniversalHaptic.selectionClick();
   }
+
 
   Widget _buildFeedbackButton(String text, VoidCallback onPressed) {
     return Padding(
